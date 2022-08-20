@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Blog;
+
 class BlogController extends Controller
 {
     /**
@@ -13,7 +14,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        //
+        return Blog::orderBy('id', 'DESC')->get();
     }
 
     /**
@@ -34,7 +35,7 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        $blog = new Blog; 
+        $blog = new Blog;
         $blog->title = $request->title;
         $blog->category = $request->category;
         $blog->details = $request->details;
@@ -74,7 +75,16 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $blog = Blog::find($id);
+        if ($blog) {
+            $blog->title = $request->title;
+            $blog->category = $request->category;
+            $blog->details = $request->details;
+            $blog->save();
+            return $blog;
+        } else {
+            return 'Blog Not Found';
+        }
     }
 
     /**
@@ -85,6 +95,12 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $blog = Blog::find($id);
+        if ($blog) {
+            $blog->delete();
+            return 'Blog Deleted Successfully!';
+        } else {
+            return 'Blog Not Found';
+        }
     }
 }
