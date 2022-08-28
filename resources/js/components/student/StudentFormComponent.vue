@@ -32,7 +32,7 @@
 
                     <el-row :guuter="10">
                         <el-form-item>
-                            <el-button type="sucess" @click="saveForm('studentForm')">Save Student</el-button>
+                            <el-button type="success" @click="saveForm('studentForm')">Save Student</el-button>
                         </el-form-item>
                     </el-row>
 
@@ -48,6 +48,11 @@
 <script>
     export default {
         name: 'student-form-component',
+
+        props:{
+            scope: String,
+        },  
+
         mounted() {
             console.log('Component mounted.')
         },
@@ -70,7 +75,12 @@
                 window.location.href = '/students'
             },
             saveForm(formName) {
-
+                this.$refs[formName].validate((valid) => {
+                    if(valid)
+                    {
+                        this.$store.dispatch('saveStudent', this.model);
+                    }
+                });
             }
         }
     }

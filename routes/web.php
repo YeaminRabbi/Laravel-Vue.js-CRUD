@@ -26,3 +26,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 Route::get('/add-student', [App\Http\Controllers\StudentController::class, 'create'])->name('add-student');
+Route::post('/save-student', [App\Http\Controllers\StudentController::class, 'store'])->name('store-student');
