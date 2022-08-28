@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,8 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/about', function () {
-    return view('about');
-});
 
-Route::get('/add-employee', [EmployeeController::class, 'create']);
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+
+Route::get('/dashboard', [App\Http\Controllers\BackendController::class, 'index'])->name('dashboard');
