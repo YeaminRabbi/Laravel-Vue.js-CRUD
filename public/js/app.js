@@ -5395,7 +5395,7 @@ Vue.component('example-component', (__webpack_require__(/*! ./components/Example
  */
 
 var app = new Vue({
-  el: '#app'
+  el: '#vue-app'
 });
 
 /***/ }),
