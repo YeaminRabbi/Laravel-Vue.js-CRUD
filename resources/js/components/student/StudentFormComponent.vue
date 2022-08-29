@@ -11,19 +11,19 @@
                     <el-row :guuter="10">
                         
                         <el-form-item label="Name" required prop="name">
-                            <el-input v-model="model.name" aria-placeholder="Studnet Name"></el-input>
+                            <el-input v-model="model.name"></el-input>
                         </el-form-item>
                         
                         <el-form-item label="Email" required prop="email">
-                            <el-input v-model="model.email" aria-placeholder="Studnet Email"></el-input>
+                            <el-input v-model="model.email"></el-input>
                         </el-form-item>
                         
                         <el-form-item label="Class" required prop="class">
-                            <el-input v-model="model.class" aria-placeholder="Studnet Class"></el-input>
+                            <el-input v-model="model.class"></el-input>
                         </el-form-item>
 
                         <el-form-item label="Section" required prop="section">
-                            <el-input v-model="model.section" aria-placeholder="Studnet Section"></el-input>
+                            <el-input v-model="model.section"></el-input>
                         </el-form-item>
 
 
@@ -33,7 +33,11 @@
                     <el-row :guuter="10">
                         <el-form-item>
                             <el-button type="success" @click="saveForm('studentForm')">Save Student</el-button>
+                            <el-button type="warning" @click="getList()">Students List</el-button>
+
                         </el-form-item>
+
+                       
                     </el-row>
 
                 </el-form>
@@ -71,7 +75,11 @@
             }
         },
         methods: {
+
             goBack() {
+                window.location.href = '/students'
+            },
+            getList() {
                 window.location.href = '/students'
             },
             saveForm(formName) {

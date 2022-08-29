@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,7 @@ Route::get('/example', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-
+Route::post('/get-studentsdata', [StudentController::class, 'fetchstudentData']);
 Route::get('/add-student', [App\Http\Controllers\StudentController::class, 'create'])->name('add-student');
 Route::post('/save-student', [App\Http\Controllers\StudentController::class, 'store'])->name('store-student');
+Route::get('/students', [StudentController::class, 'index'])->name('student');

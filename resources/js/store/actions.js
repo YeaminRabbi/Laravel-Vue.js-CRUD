@@ -14,7 +14,15 @@ function hideLoader(){
     loader.close();
 }
 
-export const saveStudent = ({comit}, payload) => {
+export const getStudents = ({commit}, payload) => {
+     let url = `/get-studentsdata`;
+      axios.post(url, payload)
+      .then(res => {
+            commit('setTableData', res.data);
+        });
+}
+
+export const saveStudent = ({commit}, payload) => {
     let url = `/save-student`;
 
     showLoader('Saving Student');

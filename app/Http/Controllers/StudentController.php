@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 class StudentController extends Controller
 {
+    public function fetchstudentData()
+    {
+        return Student::orderBy('id','ASC')->get();
+    }
+    public function index()
+    {
+        return view('student.view');
+    }
     public function create()
     {
         $data= [
