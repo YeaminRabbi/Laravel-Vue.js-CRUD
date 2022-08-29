@@ -37,3 +37,20 @@ export const saveStudent = ({commit}, payload) => {
         windows.location.href = '/add-students';
     });
 }
+
+
+export const updateStudent = ({commit}, payload) => {
+    let url = `/update-student/${payload.id}`;
+
+    showLoader('Updating Student Information');
+    axios.put(url, payload.model).then(res => {
+        Vue.prototype.$notify({
+            title:"Success",
+            message:"Student Updated Successfully!",
+            type: "success",
+        });
+
+        hideLoader();
+        windows.location.href = '/students';
+    });
+}

@@ -6,7 +6,6 @@
             <student-form-component
                 scope="{{ $scope }}"
                 :id="{{ $id ?? 0 }}"
-
             >
             </student-form-component>
         </div>

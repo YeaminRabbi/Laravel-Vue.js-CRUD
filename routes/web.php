@@ -24,8 +24,12 @@ Route::get('/example', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/delete-student/{id}/delete', [StudentController::class, 'delete'])->name('delete-students');
+Route::get('/edit-student/{id}/edit', [StudentController::class, 'edit'])->name('edit-students');
+Route::put('/update-student/{id}', [StudentController::class, 'update'])->name('updateStudent');
 
-Route::post('/get-studentsdata', [StudentController::class, 'fetchstudentData']);
+Route::post('/get-studentsdata', [StudentController::class, 'fetchstudentData'])->name('fetchStudentData');
 Route::get('/add-student', [App\Http\Controllers\StudentController::class, 'create'])->name('add-student');
 Route::post('/save-student', [App\Http\Controllers\StudentController::class, 'store'])->name('store-student');
-Route::get('/students', [StudentController::class, 'index'])->name('student');
+Route::get('/students', [StudentController::class, 'index'])->name('students');
+Route::get('/fetch-student-showbyid/{id}', [StudentController::class, 'editData']);

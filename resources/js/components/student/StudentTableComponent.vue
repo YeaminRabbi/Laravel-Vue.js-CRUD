@@ -33,12 +33,12 @@
 
                    
                     <el-table-column align="right">
-                        <template  slot="header" slot-scope="scope">
+                        <template  slot="header">
                             <el-input v-model="searchQuery" size="mini" placeholder="Type to search" />
                         </template>
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete
+                            <el-button size="mini" type="primary" @click="editData(scope.$index, scope.row)">Edit</el-button>
+                            <el-button size="mini" type="danger" @click="deleteData(scope.$index, scope.row)">Delete
                             </el-button>
                         </template>
                     </el-table-column>
@@ -131,6 +131,19 @@ import { mapGetters } from 'vuex';
         methods: {
             create(){
                 window.location.href = '/add-student';
+            },
+            handleDelete(id)
+            {
+                console.log(id);
+            },
+            editData(index, row){
+                console.log(row);
+                window.location.href = '/edit-student/'+row.id+'/edit';
+            },
+            deleteData(index, row)
+            {
+                console.log(row.id);
+                window.location.href = '/delete-student/'+row.id+'/delete';
             }
 
         }

@@ -50,15 +50,30 @@
 </template>
 
 <script>
+import axios from 'axios';
+
     export default {
         name: 'student-form-component',
 
         props:{
             scope: String,
+            id: Number
         },  
 
         mounted() {
-            console.log('Component mounted.')
+            switch(this.scope){
+                case 'edit' : 
+                    axios.get(`/fetch-student-showbyid/${this.id}`)
+                    .then(res=>{
+                        console.log(res.data.data);
+                        this.$set(this,'model',res.data.data);
+                    });
+                    break;
+                default:
+                    break;
+
+            }
+            
         },
         data() {
             return {
@@ -86,7 +101,17 @@
                 this.$refs[formName].validate((valid) => {
                     if(valid)
                     {
-                        this.$store.dispatch('saveStudent', this.model);
+                        switch(this.scope){
+                            case 'create':
+                                this.$store.dispatch('saveStudent', this.model);
+                                break;
+                            case 'edit':
+                                this.$store.dispatch('updateStudent', {id:this.id, model:this.model});
+                                break;
+                            default: 
+                                break;
+
+                        }
                     }
                 });
             }

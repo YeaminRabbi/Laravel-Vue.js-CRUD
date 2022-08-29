@@ -7001,13 +7001,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'student-form-component',
   props: {
-    scope: String
+    scope: String,
+    id: Number
   },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    var _this = this;
+
+    switch (this.scope) {
+      case 'edit':
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get("/fetch-student-showbyid/".concat(this.id)).then(function (res) {
+          console.log(res.data.data);
+
+          _this.$set(_this, 'model', res.data.data);
+        });
+        break;
+
+      default:
+        break;
+    }
   },
   data: function data() {
     return {
@@ -7028,11 +7045,27 @@ __webpack_require__.r(__webpack_exports__);
       window.location.href = '/students';
     },
     saveForm: function saveForm(formName) {
-      var _this = this;
+      var _this2 = this;
 
       this.$refs[formName].validate(function (valid) {
         if (valid) {
-          _this.$store.dispatch('saveStudent', _this.model);
+          switch (_this2.scope) {
+            case 'create':
+              _this2.$store.dispatch('saveStudent', _this2.model);
+
+              break;
+
+            case 'edit':
+              _this2.$store.dispatch('updateStudent', {
+                id: _this2.id,
+                model: _this2.model
+              });
+
+              break;
+
+            default:
+              break;
+          }
         }
       });
     }
@@ -7124,6 +7157,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     create: function create() {
       window.location.href = '/add-student';
+    },
+    handleDelete: function handleDelete(id) {
+      console.log(id);
+    },
+    editData: function editData(index, row) {
+      console.log(row);
+      window.location.href = '/edit-student/' + row.id + '/edit';
+    },
+    deleteData: function deleteData(index, row) {
+      console.log(row.id);
+      window.location.href = '/delete-student/' + row.id + '/delete';
     }
   }
 });
@@ -7363,32 +7407,16 @@ var render = function render() {
       align: "right"
     },
     scopedSlots: _vm._u([{
-      key: "header",
-      fn: function fn(scope) {
-        return [_c("el-input", {
-          attrs: {
-            size: "mini",
-            placeholder: "Type to search"
-          },
-          model: {
-            value: _vm.searchQuery,
-            callback: function callback($$v) {
-              _vm.searchQuery = $$v;
-            },
-            expression: "searchQuery"
-          }
-        })];
-      }
-    }, {
       key: "default",
       fn: function fn(scope) {
         return [_c("el-button", {
           attrs: {
-            size: "mini"
+            size: "mini",
+            type: "primary"
           },
           on: {
             click: function click($event) {
-              return _vm.handleEdit(scope.$index, scope.row);
+              return _vm.editData(scope.$index, scope.row);
             }
           }
         }, [_vm._v("Edit")]), _vm._v(" "), _c("el-button", {
@@ -7398,13 +7426,27 @@ var render = function render() {
           },
           on: {
             click: function click($event) {
-              return _vm.handleDelete(scope.$index, scope.row);
+              return _vm.deleteData(scope.$index, scope.row);
             }
           }
         }, [_vm._v("Delete\n                        ")])];
       }
     }])
-  })], 2)], 1)])], 1);
+  }, [_c("template", {
+    slot: "header"
+  }, [_c("el-input", {
+    attrs: {
+      size: "mini",
+      placeholder: "Type to search"
+    },
+    model: {
+      value: _vm.searchQuery,
+      callback: function callback($$v) {
+        _vm.searchQuery = $$v;
+      },
+      expression: "searchQuery"
+    }
+  })], 1)], 2)], 2)], 1)])], 1);
 };
 
 var staticRenderFns = [];
@@ -7494,7 +7536,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getStudents": () => (/* binding */ getStudents),
-/* harmony export */   "saveStudent": () => (/* binding */ saveStudent)
+/* harmony export */   "saveStudent": () => (/* binding */ saveStudent),
+/* harmony export */   "updateStudent": () => (/* binding */ updateStudent)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
@@ -7533,6 +7576,20 @@ var saveStudent = function saveStudent(_ref2, payload) {
     });
     hideLoader();
     windows.location.href = '/add-students';
+  });
+};
+var updateStudent = function updateStudent(_ref3, payload) {
+  var commit = _ref3.commit;
+  var url = "/update-student/".concat(payload.id);
+  showLoader('Updating Student Information');
+  axios.put(url, payload.model).then(function (res) {
+    vue__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.$notify({
+      title: "Success",
+      message: "Student Updated Successfully!",
+      type: "success"
+    });
+    hideLoader();
+    windows.location.href = '/students';
   });
 };
 
