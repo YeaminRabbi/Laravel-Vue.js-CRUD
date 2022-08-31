@@ -11,7 +11,10 @@ class StudentController extends Controller
     {
         $student = Student::find($id);
         $student->delete();
-        return redirect()->route('students');
+        return response()->json([
+            'status' => 200,
+            'message' => 'Student deleted Successfully!'
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -46,9 +49,20 @@ class StudentController extends Controller
     }
 
 
-    public function fetchstudentData()
+    public function fetchstudentData(Request $request)
     {
-        return Student::orderBy('id','ASC')->get();
+        $query = Student::select('id','name','email','class','section');
+        
+        if($request->searchQuery){
+            $query->where(function ($q) use ($request){
+                $q->orWhere('name','like', '%'. $request->searchQuery.'%');
+                $q->orWhere('class','like', '%'. $request->searchQuery.'%');
+                $q->orWhere('email', 'like', '%' . $request->searchQuery . '%');
+                $q->orWhere('section', 'like', '%' . $request->searchQuery . '%');
+            });
+        }
+        $students = $query->get();
+        return $students;
     }
     public function index()
     {

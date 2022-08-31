@@ -32,8 +32,8 @@
 
 
                    
-                    <el-table-column align="right">
-                        <template  slot="header">
+                    <el-table-column align="right" max-width="90">
+                        <template  slot="header" slot-scope="scope">
                             <el-input v-model="searchQuery" size="mini" placeholder="Type to search" />
                         </template>
                         <template slot-scope="scope">
@@ -65,13 +65,19 @@ import { mapGetters } from 'vuex';
                 background: "rgba(255,255,255,0.85)",
             });
 
-            this.$store.dispatch('getStudents');
+            this.$store.dispatch('getStudents',{searchQuery: this.searchQuery});
             loading.close();
         },
         computed: {
             ...mapGetters({
                 tableData : "tableData"
             })
+        },
+        watch: {
+            searchQuery: function (val){
+                this.$store.dispatch('getStudents', {searchQuery: this.searchQuery});
+
+            }
         },
         data() {
             return {
@@ -142,10 +148,12 @@ import { mapGetters } from 'vuex';
             },
             deleteData(index, row)
             {
-                console.log(row.id);
-                window.location.href = '/delete-student/'+row.id+'/delete';
+                if(confirm('Are you sure? you want to delete this data?')){
+                    this.$store.dispatch('deleteStudent', {id:row.id});
+                    this.$store.dispatch('getStudents');
+                }
             }
-
+ 
         }
     }
 

@@ -7102,12 +7102,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       spinner: 'el-icon-loading',
       background: "rgba(255,255,255,0.85)"
     });
-    this.$store.dispatch('getStudents');
+    this.$store.dispatch('getStudents', {
+      searchQuery: this.searchQuery
+    });
     loading.close();
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)({
     tableData: "tableData"
   })),
+  watch: {
+    searchQuery: function searchQuery(val) {
+      this.$store.dispatch('getStudents', {
+        searchQuery: this.searchQuery
+      });
+    }
+  },
   data: function data() {
     return {
       searchQuery: null,
@@ -7166,8 +7175,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       window.location.href = '/edit-student/' + row.id + '/edit';
     },
     deleteData: function deleteData(index, row) {
-      console.log(row.id);
-      window.location.href = '/delete-student/' + row.id + '/delete';
+      if (confirm('Are you sure? you want to delete this data?')) {
+        this.$store.dispatch('deleteStudent', {
+          id: row.id
+        });
+        this.$store.dispatch('getStudents');
+      }
     }
   }
 });
@@ -7404,9 +7417,27 @@ var render = function render() {
     });
   }), _vm._v(" "), _c("el-table-column", {
     attrs: {
-      align: "right"
+      align: "right",
+      "max-width": "90"
     },
     scopedSlots: _vm._u([{
+      key: "header",
+      fn: function fn(scope) {
+        return [_c("el-input", {
+          attrs: {
+            size: "mini",
+            placeholder: "Type to search"
+          },
+          model: {
+            value: _vm.searchQuery,
+            callback: function callback($$v) {
+              _vm.searchQuery = $$v;
+            },
+            expression: "searchQuery"
+          }
+        })];
+      }
+    }, {
       key: "default",
       fn: function fn(scope) {
         return [_c("el-button", {
@@ -7432,21 +7463,7 @@ var render = function render() {
         }, [_vm._v("Delete\n                        ")])];
       }
     }])
-  }, [_c("template", {
-    slot: "header"
-  }, [_c("el-input", {
-    attrs: {
-      size: "mini",
-      placeholder: "Type to search"
-    },
-    model: {
-      value: _vm.searchQuery,
-      callback: function callback($$v) {
-        _vm.searchQuery = $$v;
-      },
-      expression: "searchQuery"
-    }
-  })], 1)], 2)], 2)], 1)])], 1);
+  })], 2)], 1)])], 1);
 };
 
 var staticRenderFns = [];
@@ -7535,6 +7552,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "deleteStudent": () => (/* binding */ deleteStudent),
 /* harmony export */   "getStudents": () => (/* binding */ getStudents),
 /* harmony export */   "saveStudent": () => (/* binding */ saveStudent),
 /* harmony export */   "updateStudent": () => (/* binding */ updateStudent)
@@ -7587,6 +7605,20 @@ var updateStudent = function updateStudent(_ref3, payload) {
       title: "Success",
       message: "Student Updated Successfully!",
       type: "success"
+    });
+    hideLoader();
+    windows.location.href = '/students';
+  });
+};
+var deleteStudent = function deleteStudent(_ref4, payload) {
+  var commit = _ref4.commit;
+  var url = "/delete-student/".concat(payload.id);
+  showLoader('Deleting Student Information');
+  axios.get(url, payload.model).then(function (res) {
+    vue__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.$notify({
+      title: "Success",
+      message: "Student Deleted Successfully!",
+      type: "Success"
     });
     hideLoader();
     windows.location.href = '/students';

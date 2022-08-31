@@ -24,7 +24,7 @@ Route::get('/example', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/delete-student/{id}/delete', [StudentController::class, 'delete'])->name('delete-students');
+Route::get('/delete-student/{id}', [StudentController::class, 'delete'])->name('delete-students');
 Route::get('/edit-student/{id}/edit', [StudentController::class, 'edit'])->name('edit-students');
 Route::put('/update-student/{id}', [StudentController::class, 'update'])->name('updateStudent');
 

@@ -16,6 +16,8 @@ function hideLoader(){
 
 export const getStudents = ({commit}, payload) => {
      let url = `/get-studentsdata`;
+
+     
       axios.post(url, payload)
       .then(res => {
             commit('setTableData', res.data);
@@ -48,6 +50,22 @@ export const updateStudent = ({commit}, payload) => {
             title:"Success",
             message:"Student Updated Successfully!",
             type: "success",
+        });
+
+        hideLoader();
+        windows.location.href = '/students';
+    });
+}
+
+
+export const deleteStudent = ({commit}, payload) => {
+       let url = `/delete-student/${payload.id}`;
+    showLoader('Deleting Student Information');
+    axios.get(url, payload.model).then(res => {
+        Vue.prototype.$notify({
+            title:"Success",
+            message:"Student Deleted Successfully!",
+            type: "Success",
         });
 
         hideLoader();
